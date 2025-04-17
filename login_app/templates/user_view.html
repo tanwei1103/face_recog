@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Ballot Casts</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+        .btn-secondary, .btn-danger {
+            margin-right: 5px;
+        }
+        .btn-secondary:hover {
+            background-color: #6c757d;
+        }
+        .btn-danger:hover {
+            background-color: #dc3545;
+        }
+        .list-group-item {
+            background-color: #fff;
+            border: 1px solid #f0f0f0;
+        }
+        .card-header {
+            background-color: #007bff;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center mb-4">View Ballot Casts</h2>
+        <div class="text-right mb-4">
+            <a href="{{ url_for('home') }}" class="btn btn-secondary">Return to Homepage</a>
+            <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+        </div>
+
+        <h3 class="mb-3">Ballot Overview by Area</h3>
+        {% for vote_area, votes in ballot_overview.items() %}
+            <div class="card">
+                <div class="card-header">
+                    Vote Area: {{ vote_area }}
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Vote Rate: {{ votes.vote_rate }}%</h5>
+                    <ul class="list-group list-group-flush">
+                        {% for candidate, count in votes.candidate_votes.items() %}
+                            <li class="list-group-item">
+                                {{ candidate }} - Votes: {{ count }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.10/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

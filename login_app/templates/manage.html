@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Vote Areas</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .container {
+            padding-top: 50px;
+        }
+        .card {
+            margin-top: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+        .table {
+            margin-top: 20px;
+        }
+        .table thead th {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-danger {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="d-flex justify-content-between mb-4">
+        <h2>Manage Vote Areas</h2>
+        <div>
+            <a href="{{ url_for('home') }}" class="btn btn-outline-secondary">Return to Homepage</a>
+            <a href="{{ url_for('logout') }}" class="btn btn-outline-danger">Logout</a>
+        </div>
+    </div>
+    <p>Add, edit, or remove vote areas below.</p>
+
+    <!-- Flash messages section -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <!-- Add new vote area form -->
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Add New Vote Area</h4>
+            <form action="{{ url_for('manage_vote_areas') }}" method="post">
+                <input type="hidden" name="action" value="add">
+                <div class="form-group">
+                    <label for="name">Vote Area Name:</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Vote Area</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Existing vote areas list -->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for vote_area in vote_areas %}
+            <tr>
+                <td>{{ vote_area.id }}</td>
+                <td>{{ vote_area.name }}</td>
+                <td>{{ vote_area.description }}</td>
+                <td>
+                    <form action="{{ url_for('manage_vote_areas') }}" method="post" class="d-inline">
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="vote_area_id" value="{{ vote_area.id }}">
+                        <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.10/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

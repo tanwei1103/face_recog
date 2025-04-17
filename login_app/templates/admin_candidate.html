@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Candidate</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="mb-4">
+            <a href="{{ url_for('home') }}" class="btn btn-secondary">Return to Homepage</a>
+            <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+        </div>
+
+        <h2>Add a New Candidate</h2>
+        <p>Enter the details of the candidate you wish to add to the voting system.</p>
+
+        <form action="{{ url_for('admin_candidate') }}" method="post">
+            <input type="hidden" name="action" value="add"> <!-- Include hidden field for the action -->
+            <div class="form-group">
+                <label for="name">Candidate Name:</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="information">Candidate Information:</label>
+                <textarea class="form-control" id="information" name="information" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="vote_area_id">Vote Area:</label>
+                <select class="form-control" id="vote_area_id" name="vote_area_id" required>
+                    {% for area in vote_areas %}
+                        <option value="{{ area.id }}">{{ area.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Candidate</button>
+        </form>
+
+        <!-- Existing Candidates -->
+        <div class="mt-5">
+            <h4>Existing Candidates</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Information</th>
+                        <th>Vote Area ID</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for candidate in candidates %}
+                    <tr>
+                        <td>{{ candidate.id }}</td>
+                        <td>{{ candidate.name }}</td>
+                        <td>{{ candidate.information }}</td>
+                        <td>{{ candidate.vote_area_id }}</td>
+                        <td>
+                            <form action="{{ url_for('admin_candidate') }}" method="post">
+                                <input type="hidden" name="action" value="remove">
+                                <input type="hidden" name="candidate_id" value="{{ candidate.id }}">
+                                <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.10/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

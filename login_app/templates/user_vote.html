@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cast Your Vote</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f4f4f4;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            margin-top: 40px;
+        }
+        .form-check-label {
+            margin-bottom: 10px;
+        }
+        .btn-primary {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .btn-secondary, .btn-danger {
+            margin-right: 5px;
+        }
+        .btn-secondary:hover, .btn-danger:hover {
+            opacity: 0.85;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 class="text-center">Cast Your Vote</h2>
+    <div class="text-center mb-4">
+        <a href="{{ url_for('home') }}" class="btn btn-secondary">Return to Homepage</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <!-- Checking if there are any candidates to display -->
+    {% if candidates %}
+        <form action="{{ url_for('cast_vote') }}" method="post">
+            {% for candidate in candidates %}
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="radio" name="candidate_id" id="candidate{{ candidate.id }}" value="{{ candidate.id }}" required>
+                    <label class="form-check-label" for="candidate{{ candidate.id }}">
+                        {{ candidate.name }} - {{ candidate.information }}
+                    </label>
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary mt-4">Submit Vote</button>
+        </form>
+    {% else %}
+        <p class="text-center">No candidates available to vote for in your area at this time.</p>
+    {% endif %}
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.10/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            padding-top: 50px;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        .logout-btn {
+            margin-bottom: 30px;
+        }
+        .dashboard-title {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .admin-actions, .user-actions {
+            margin-bottom: 20px;
+        }
+        .list-group-item {
+            transition: background-color 0.2s ease;
+        }
+        .list-group-item:hover {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 class="dashboard-title">Welcome to the Voting Dashboard!</h2>
+    <div class="text-right logout-btn">
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+    </div>
+    {% if user %}
+        {% if user.is_admin %}
+            <h3>Admin Actions</h3>
+            <div class="admin-actions">
+                <ul class="list-group">
+                    <li class="list-group-item"><a href="{{ url_for('admin_approve') }}">Approve User Registrations</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('admin_candidate') }}">Add Candidate</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('manage_vote_areas') }}">Manage Vote Areas</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('admin_view_votes') }}">View All Votes</a></li>
+                </ul>
+            </div>
+        {% else %}
+            <h3>User Actions</h3>
+            <div class="user-actions">
+                <ul class="list-group">
+                    <li class="list-group-item"><a href="{{ url_for('view_candidates') }}">View Candidates</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('cast_vote') }}">Cast Your Vote</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('view_ballot_overview') }}">View My Ballot</a></li>
+                </ul>
+            </div>
+        {% endif %}
+    {% else %}
+        <p>Please log in to view the dashboard.</p>
+    {% endif %}
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.10/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
